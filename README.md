@@ -12,8 +12,16 @@ cd server npm install
 ```
 # Lancer les serveurs
 
-Serveur developpement React :  ``` cd client && npm star```
-Serveur Node : ``` cd server && node server.js ```
+Serveur developpement React :  
+``` 
+cd client
+npm start
+```
+Serveur Node : 
+``` 
+cd server
+node server.js 
+```
 
 
 
