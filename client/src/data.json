@@ -1,0 +1,15 @@
+[
+    {
+        "Nom" : "Centre 1",
+        "Tel" : "0789898989",
+        "Coordonnees" : [43.609234, 1.454764],
+        "Prestation" : "VACCIN POUR MOURIR"
+    },
+
+    {
+        "Nom" : "Centre 2",
+        "Tel" : "0798989898",
+        "Coordonnees" : [43.610477, 1.435868],
+        "Prestation" : "VACCIN POUR SE SAUVER"
+    }
+]
