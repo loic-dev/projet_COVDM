@@ -1,0 +1,16 @@
+[
+    {
+        "name":"",
+        "adress":"",
+        "pays":"",
+        "region":"",
+        "departement":"",
+        "phone":"",
+        "email":"",
+        "prestation":"",
+        "patient":[{
+            "id":""
+        }],
+        "vaccinDispo":""    
+    }
+]
