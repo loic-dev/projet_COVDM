@@ -3,6 +3,7 @@ import config from "../config/dev.mjs";
 import httpController from './controllers/http.controller.mjs';
 import { connectDatabase } from './utils/database.util.mjs';
 import  bodyParser from "body-parser";
+import cors from 'cors'
 
 
 
@@ -15,8 +16,10 @@ const createServer = async () => {
     const jsonParser = bodyParser.json()
 
     app.use(urlencodedParser);
-    app.listen(port, () => console.log(`Listening on port ${port}`));
     app.use(jsonParser);
+    app.use(cors())
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+    
     app.use("/api", router);
     httpController(router);
 }

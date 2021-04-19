@@ -1,0 +1,17 @@
+#mapbox { position: absolute; top: 0; bottom: 0; width: 50%; }
+
+.marker{
+    
+    display: block;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-image: url("../ressources/marker.svg");
+        
+}
