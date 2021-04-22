@@ -15,3 +15,13 @@
     background-image: url("../ressources/marker.svg");
         
 }
+
+.mapboxgl-popup-content{
+    background-color: #1c1d21 !important;
+    width: 300px !important;
+    max-height: 500px  !important;
+}
+
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip{
+    border-top-color: #1c1d21  !important;
+}
