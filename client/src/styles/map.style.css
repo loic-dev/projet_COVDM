@@ -17,11 +17,11 @@
 }
 
 .mapboxgl-popup-content{
-    background-color: #1c1d21 !important;
+    background-color: #232633 !important;
     width: 300px !important;
     max-height: 500px  !important;
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip{
-    border-top-color: #1c1d21  !important;
+    border-top-color: #232633  !important;
 }

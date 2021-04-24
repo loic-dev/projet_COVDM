@@ -1,0 +1,24 @@
+.chart{
+    position: fixed;
+    top: 0;
+    left: 48vw;
+    right: 0;
+    bottom: 30vh;
+    padding: 20px;
+    color: white;
+}
+
+.choiceOption{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+input{
+    margin: 0 10px;
+}
+
+.chartContainer{
+    margin: 40px 50px 20px 50px;
+    height: 75%;
+}

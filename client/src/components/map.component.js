@@ -62,13 +62,15 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                 'generateId': true 
             });
 
+            
+
             mapbox.addLayer({
                 'id': 'fill-region',
                 'type': 'fill',
                 'source': 'place', // reference the data source
                 'layout': {},
                 'paint': {
-                    'fill-color': 'rgb(97, 51, 255)', // blue color fill
+                    'fill-color': 'rgb(41, 75, 184)', // blue color fill
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -82,7 +84,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                 'source': 'place',
                 'layout': {},
                 'paint': {
-                    'line-color': 'rgb(97, 51, 255)',
+                    'line-color': 'rgb(41, 75, 184)',
                     'line-width': 3,
                     'line-opacity':0.8
             }});
@@ -334,7 +336,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                         'source': 'place',
                         'layout': {},
                         'paint': {
-                            'line-color': 'rgb(97, 51, 255)',
+                            'line-color': 'rgb(41, 75, 184)',
                             'line-width': 3,
                             'line-opacity':0.8
                     }},'markers');
@@ -357,7 +359,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                         'source': 'place', // reference the data source
                         'layout': {},
                         'paint': {
-                            'fill-color': 'rgb(97, 51, 255)', // blue color fill
+                            'fill-color': 'rgb(41, 75, 184)', // blue color fill
                             'fill-opacity': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
@@ -372,7 +374,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                         'source': 'place',
                         'layout': {},
                         'paint': {
-                            'line-color': 'rgb(97, 51, 255)',
+                            'line-color': 'rgb(41, 75, 184)',
                             'line-width': 3,
                             'line-opacity':0.8
                     }});

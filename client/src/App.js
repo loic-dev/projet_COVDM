@@ -1,11 +1,11 @@
 //import logo from './logo.svg';
-import { useState,useEffect } from 'react';
+import { useState,useEffect, Fragment } from 'react';
 import './App.css';
 import { SCREENING_CENTER, VACCINATION_CENTER } from './constants/state.constant';
 import { loadData, loadLayer, loadCenter } from './Utils/api.util.js'
 import MapBox from './components/map.component'
 import Loader from './components/loader.component';
-
+import Graph from './components/graph.component';
 
 
 function App() {
@@ -171,6 +171,21 @@ function App() {
                 {mapState.layers !== null && <MapBox showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
                 <div className={`info ${mapLoading === false ? "loaded" : ""}`}>
                     {mapLoading === true && <Loader/>}
+                    {mapLoading === false && dataLoading === false &&
+                    <Fragment>
+                        <Graph dataState={dataState}/>
+                        <div className="staticInfo">
+                            <div className="tiles">
+
+                            </div>
+                            <div className="tiles">
+
+                            </div>
+
+                        </div>
+                    </Fragment>
+                        
+                    }
                 </div>
             </div>
         </div>)

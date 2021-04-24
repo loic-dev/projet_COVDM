@@ -2,6 +2,8 @@ import faker from 'faker'
 import { db } from '../utils/database.util.mjs';
 import { SCREENING_CENTER,VACCINATION_CENTER } from '../constants/database.constant.mjs';
 import { VACCINATION } from '../constants/services.constant.mjs';
+import pkg from 'mongodb';
+const { ObjectId } = pkg;
 
 
 
@@ -34,8 +36,10 @@ const generateDataVaccin =  () => {
 const generateData = async (req,res) => {
     const {type} = req.body;
     if(type === VACCINATION){
-        const data =  generateDataVaccin()
-        const result = await db.collection(VACCINATION_CENTER).updateMany({}, {$set: {"data": data}}, false, true)
+        let centerVac = await db.collection(VACCINATION_CENTER).find().toArray();
+        centerVac.forEach(center => {
+            db.collection(VACCINATION_CENTER).updateOne({_id:new ObjectId(center._id)}, {$set: {"data": generateDataVaccin()}})
+        })
     } else {
 
     }
