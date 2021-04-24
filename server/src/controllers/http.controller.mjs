@@ -1,16 +1,17 @@
-import { GET_VACCINATION_CENTER,GET_SCREENING_CENTER , GENERATE_DATA,LOAD_DATA } from '../constants/routes.constant.mjs';
+import {GENERATE_DATA,LOAD_DATA,LOAD_CENTER , LOAD_LAYER} from '../constants/routes.constant.mjs';
+import generateData from '../services/generateData.service.mjs';
+import loadCenter from '../services/loadCenter.service.mjs';
 import loadData from '../services/loadData.service.mjs';
-
+import loadLayer from '../services/loadLayer.service.mjs';
 
 export default function (app) {
 
-    
 
-    //app.get(GET_VACCINATION_CENTER, vaccinationCenter);
-    //app.get(GET_SCREENING_CENTER,screeningCenter);
-
+    app.post(LOAD_CENTER, loadCenter)
     app.post(LOAD_DATA, loadData)
-    //sapp.post(GENERATE_DATA, generateData);
+    app.post(LOAD_LAYER, loadLayer)
+    app.post(GENERATE_DATA, generateData);
+
     
 
 

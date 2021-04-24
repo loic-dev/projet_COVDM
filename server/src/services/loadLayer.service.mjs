@@ -68,20 +68,19 @@ const loadDepartement = async (codeDepartement) => {
 
 
 
-
-
-
-const loadDataGEOJSON = (type,codeRegion,codeDepartement) => {
-    switch (type) {
+const loadLayer = async (req,res) => {
+    console.log(req.body)
+    const {typePlace,codeRegion,codeDepartement} = req.body;
+    switch (typePlace) {
         case "pays":
-            return pays;
+            return res.status(200).send({res:pays});
         case "region":
-            return loadRegion(codeRegion);
+            return res.status(200).send({res:await loadRegion(codeRegion)});
         case "departement":
-            return loadDepartement(codeDepartement)
+            return res.status(200).send({res:await loadDepartement(codeDepartement)});
         default:
             break;
     }
 }
 
-export default loadDataGEOJSON;
+export default loadLayer;
