@@ -7,10 +7,11 @@ import turf from "@turf/bbox";
 import markerIcon from '../ressources/marker.png'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import "../styles/popup.style.css"
+import { VACCINATION_CENTER } from '../constants/state.constant';
 
 
 
-const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading}) => {
+const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMapLoading}) => {
 
     const [map, setMap] = useState(null);
     const [popupRef, setPopupRef] = useState(null)
@@ -139,8 +140,10 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
         showCenter(e.features[0].properties.id)
         var coordinates = e.features[0].geometry.coordinates
         var properties = e.features[0].properties
-       
-        var contain = `
+        let contain = ``
+
+        if(typeCenter == VACCINATION_CENTER){
+            contain = `
             <div class="popup">
                 <h3>${properties.nom}</h3>
                 <p>${properties.adr_num} ${properties.adr_voie} ${properties.com_cp} ${properties.com_nom}</p>
@@ -162,6 +165,33 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                 ${properties.rdv_tel2 && `<p>Telephone 2 : ${properties.rdv_tel2}</p>`}
             </div>
         `
+        } else {
+           
+            contain = `
+            <div class="popup">
+                <h3>${properties.nom}</h3>
+                <p>${properties.adresse}</p>
+                <p>Public : ${properties.public}</p>
+                <p>Mode prelevement : ${properties.mod_prel} </p>
+                <p>PCR : ${properties.do_prel}</p>
+                <p>Antigéniqque : ${properties.do_antigenic}</p>
+                <p>RDV : ${properties.check_rdv}</p>
+                <h4>Horaire</h4>
+                ${!properties.horaire ? "non renseigné" : 
+                    `<p>${properties.horaire}</p>`
+                }
+                <h4>Horaire prioritaire</h4>
+                ${!properties.horaire_prio ? "non renseigné" : 
+                    `<p>${properties.horaire_prio}</p>`
+                }
+                <p>Site web : ${properties.web_rdv ? `<a href="${properties.web_rdv}">lien</a>`: "non renseigné"} </p>
+                <p>Telephone : ${properties.tel_rdv ? properties.tel_rdv : "non renseigné"}</p>
+            </div>
+        `
+        }
+
+
+        
         
     
         if(popupRef === null){
@@ -307,8 +337,8 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter, setMapLoading})
                 
                 if(mapState.type === "center"){
                     let tu = turf(mapState.markers)
-                    tu[1] = tu[1]+0.03
-                    tu[3] = tu[3]+0.03
+                    tu[1] = tu[1]+0.06
+                    tu[3] = tu[3]+0.06
                     map.fitBounds(tu);
                      
                 } else {

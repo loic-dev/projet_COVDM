@@ -29,9 +29,33 @@ const generateDataVaccin =  () => {
         data_COVD.push(center)
     }
     return data_COVD;
-    
-
 }
+
+
+const generateDataDepistage = () => {
+    const data_COVD = []
+    const genders = ["male", "female"];
+    const timestamp = 1609459200000;
+    let number = 5;
+    for(let i=0;i<=number;i++){
+        let gender = genders[Math.floor(Math.random() * genders.length)]
+        let dateRandom = Math.floor(Math.random() * (Date.now() - timestamp + 1)) + timestamp;
+        let date = new Date(dateRandom);
+        let random = Math.random()
+        let center = {
+            name:faker.name.firstName(gender),
+            age:Math.floor(Math.random() * (90 - 18 + 1)) + 18,
+            gender:gender,
+            positif:random <= 0.2 ? true : false,
+            dateVaccination:date.getTime()
+        }
+        data_COVD.push(center)
+    }
+    return data_COVD;
+}
+
+
+
 
 const generateData = async (req,res) => {
     const {type} = req.body;
@@ -41,7 +65,10 @@ const generateData = async (req,res) => {
             db.collection(VACCINATION_CENTER).updateOne({_id:new ObjectId(center._id)}, {$set: {"data": generateDataVaccin()}})
         })
     } else {
-
+        let centerVac = await db.collection(SCREENING_CENTER).find().toArray();
+        centerVac.forEach(center => {
+            db.collection(SCREENING_CENTER).updateOne({_id:new ObjectId(center._id)}, {$set: {"data": generateDataDepistage()}})
+        })
     }
     return res.status(200).send({res:"good"})
     

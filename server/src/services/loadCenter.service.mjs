@@ -3,6 +3,9 @@ import departements from '../GEOJSON/departments.js'
 
 
 export const loadCenterService = async (typeCenter,typePlace, typeResult, codeRegion,codeDepartement,centerId) => {
+
+
+
     //lister les codes des departement d'une region
     const listeDepartementOfRegion = async (codeRegion) => {
         let tab = []
@@ -26,10 +29,35 @@ export const loadCenterService = async (typeCenter,typePlace, typeResult, codeRe
                 return centers
             case "region":
                 let depList = await listeDepartementOfRegion(codeRegion)
-                return centers.filter(center => depList.includes(center.com_insee.toString().substr(0,2)) == true);
+                switch (typeCenter) {
+                    case "vaccinationCenter":
+                        return centers.filter(center => depList.includes(center.com_insee.toString().substr(0,2)) == true);
+                    case "screeningCenter":
+                        if(codeRegion == "94"){
+                            return centers.filter(center => center.adresse.match(/[0-9]{5,}/g)[0].substr(0,2) == "20");
+                        } else {
+                            return centers.filter(center => depList.includes(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,2)) == true);
+                        }
+                        
+                    default:
+                        break;
+                }
             case "departement":
-                return centers.filter(center => [codeDepartement].includes(center.com_insee.toString().substr(0,2)) == true);
-            
+                switch (typeCenter) {
+                    case "vaccinationCenter":
+                        return centers.filter(center => [codeDepartement].includes(center.com_insee.toString().substr(0,2)) == true);
+                    case "screeningCenter":
+                        if(codeDepartement == "2A"){
+                            return centers.filter(center => parseInt(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,3)) < 202);
+                        }
+                        if(codeDepartement == "2B"){
+                            return centers.filter(center => parseInt(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,3)) >= 202);
+                        }
+                        return centers.filter(center => [codeDepartement].includes(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,2)) == true);
+                        
+                    default:
+                        break;
+                }
             default:
                 break;
         }
@@ -40,7 +68,7 @@ export const loadCenterService = async (typeCenter,typePlace, typeResult, codeRe
 
 const loadCenter = async (req,res) => {
     const {typeCenter,typePlace,codeRegion,codeDepartement,centerId} = req.body;
-    return res.status(200).send({res:await loadCenterService(typeCenter,typePlace, "center", codeRegion,codeDepartement,centerId)})
+    return res.status(200).send({res:await loadCenterService(typeCenter,typePlace, "center", codeRegion,codeDepartement,centerId)})  
 }
 
 export default loadCenter;

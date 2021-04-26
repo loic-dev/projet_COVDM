@@ -1,11 +1,12 @@
 //import logo from './logo.svg';
-import { useState,useEffect, Fragment } from 'react';
+import { useState,useEffect, Fragment ,useRef} from 'react';
 import './App.css';
 import { SCREENING_CENTER, VACCINATION_CENTER } from './constants/state.constant';
 import { loadData, loadLayer, loadCenter } from './Utils/api.util.js'
 import MapBox from './components/map.component'
 import Loader from './components/loader.component';
 import Graph from './components/graph.component';
+import Switcher from './components/switcher.component';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
     let initDataState = null
 
 
+
     const [typeCenter, setTypeCenter ] =  useState(VACCINATION_CENTER)
     const [mapState, setMapState] =  useState(initMapState)
     const [dataState,setDataState ] = useState(initDataState)
@@ -36,42 +38,80 @@ function App() {
             features: []
         }
         centers.forEach(center => {
-            let feature = {
-                type: "Feature",
-                properties: {
-                    id:center._id,
-                    code_dep:center.com_insee.toString().substr(0,2),
-                    nom:center.nom,
-                    adr_num:center.adr_num,
-                    adr_voie:center.adr_voie,
-                    com_cp:center.com_cp,
-                    com_nom:center.com_nom,
-                    lieu_accessibilite:center.lieu_accessibilite,
-                    rdv_lundi:center.rdv_lundi,
-                    rdv_mardi:center.rdv_mardi,
-                    rdv_mercredi:center.rdv_mercredii,
-                    rdv_jeudi:center.rdv_jeudi,
-                    rdv_vendredi:center.rdv_vendredi,
-                    rdv_samedi:center.rdv_samedi,
-                    rdv_dimanche:center.rdv_dimanche,
-                    date_ouverture:center.date_ouverture,
-                    date_fermeture:center.date_fermeture,
-                    rdv_site_web:center.rdv_site_web,
-                    rdv_tel:center.rdv_tel,
-                    rdv_tel2:center.rdv_tel2
-                },
-                geometry: {
-                    type: "Point",
-                    coordinates: [center.long_coor1,center.lat_coor1]
+            let feature;
+            if(typeCenter === VACCINATION_CENTER){
+                feature = {
+                    type: "Feature",
+                    properties: {
+                        id:center._id,
+                        code_dep:center.com_insee.toString().substr(0,2),
+                        nom:center.nom,
+                        adr_num:center.adr_num,
+                        adr_voie:center.adr_voie,
+                        com_cp:center.com_cp,
+                        com_nom:center.com_nom,
+                        lieu_accessibilite:center.lieu_accessibilite,
+                        rdv_lundi:center.rdv_lundi,
+                        rdv_mardi:center.rdv_mardi,
+                        rdv_mercredi:center.rdv_mercredi,
+                        rdv_jeudi:center.rdv_jeudi,
+                        rdv_vendredi:center.rdv_vendredi,
+                        rdv_samedi:center.rdv_samedi,
+                        rdv_dimanche:center.rdv_dimanche,
+                        date_ouverture:center.date_ouverture,
+                        date_fermeture:center.date_fermeture,
+                        rdv_site_web:center.rdv_site_web,
+                        rdv_tel:center.rdv_tel,
+                        rdv_tel2:center.rdv_tel2
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [center.long_coor1,center.lat_coor1]
+                    } 
+                }
+            } else {
+                let codeDep = center.adresse.match(/[0-9]{5,}/g)[0].substr(0,2)
+                if(codeDep == "20"){
+                    if(parseInt(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,3)) < 202){
+                        codeDep = "2A"
+                    }
+                    if(parseInt(center.adresse.match(/[0-9]{5,}/g)[0].substr(0,3)) >= 202){
+                        codeDep = "2B"
+                    }
+                }
+                feature = {
+                    type: "Feature",
+                    properties: {
+                        id:center._id,
+                        code_dep:codeDep,
+                        nom:center.rs,
+                        adresse:center.adresse,
+                        do_prel:center.do_prel,
+                        do_antigenic:center.do_antigenic,
+                        mod_prel:center.mod_prel,
+                        public:center.public,
+                        horaire:center.horaire,
+                        horaire_prio:center.horaire_prio,
+                        check_rdv:center.check_rdv,
+                        tel_rdv:center.tel_rdv,
+                        web_rdv:center.web_rdv
+                    },
+                    geometry: {
+                        type: "Point",
+                        coordinates: [parseFloat(center.longitude),parseFloat(center.latitude)]
+                    } 
                 }
             }
             markers.features.push(feature)
+            
         }); 
         return markers;
     }
 
+  
 
-    useEffect(async () => {
+
+    const loadingDataMap = async () => {
         let send = {
             typeCenter:typeCenter,
             typePlace:mapState.type,
@@ -104,11 +144,9 @@ function App() {
             markers = await createMarker(center)    
         }
         setMapState({...mapState,markers,layers})
-        
-    }, [mapState.type,mapState.region,mapState.departement,mapState.centerId]);
+    }
 
-
-    useEffect(async () => {
+    const loadingData = async () => {
         let send = {
             typeCenter:typeCenter,
             typePlace:mapState.type,
@@ -121,8 +159,17 @@ function App() {
         let data = responseData.data.res
         setDataState(data)
         setDataLoading(false)
-        
-    }, [mapState.type,mapState.region,mapState.departement,mapState.centerId])
+    }
+
+
+    useEffect(async () => {
+        await loadingDataMap()
+    }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
+
+
+    useEffect(async () => {
+        await loadingData()
+    }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId])
 
 
     const showRegion = (code) => {
@@ -161,6 +208,23 @@ function App() {
         }
     }
 
+
+    const switchCenter = () => {
+        if(typeCenter === VACCINATION_CENTER) {
+            if(mapState.type === "center"){
+                let code_dep = mapState.markers.features[0].properties.code_dep
+                showDepartement(code_dep)
+            }
+            setTypeCenter(SCREENING_CENTER) 
+        } else {
+            if(mapState.type === "center"){
+                let code_dep = mapState.markers.features[0].properties.code_dep
+                showDepartement(code_dep)
+            }
+            setTypeCenter(VACCINATION_CENTER) 
+        }
+    }
+
     
    
     return (
@@ -168,15 +232,16 @@ function App() {
             
             <div className="map d-flex">
                 {mapState.type !== "pays" && <BackShow/>}
-                {mapState.layers !== null && <MapBox showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
+                {mapState.layers !== null && <Switcher typeCenter={typeCenter} switchCenter={switchCenter.bind(this)}/>}
+                {mapState.layers !== null && <MapBox typeCenter={typeCenter} showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
                 <div className={`info ${mapLoading === false ? "loaded" : ""}`}>
+                    
                     {mapLoading === true && <Loader/>}
                     {mapLoading === false && dataLoading === false &&
                     <Fragment>
                         <Graph dataState={dataState}/>
                         <div className="staticInfo">
                             <div className="tiles">
-
                             </div>
                             <div className="tiles">
 
