@@ -48,16 +48,10 @@ const Graph = ({dataState}) => {
                     }
                 }
                 });
-
     }, [])
 
     return (<div className="chart">
-        <h3>Graphique - France</h3>
-        <div className="choiceOption">
-            <input type="button" value="genre"/>
-            <input type="button" value="age"/>
-            <input type="button" value="date"/>
-        </div>
+        
         
         <div className="chartContainer">
             <canvas id="myChart" ref={chartRef}></canvas>
