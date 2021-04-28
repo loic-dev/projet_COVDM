@@ -2,7 +2,7 @@ import "../styles/graph.style.css"
 import {useEffect, createRef} from 'react'
 import {Chart, ChartConfiguration, Tooltip, CategoryScale, BarController, BarElement, LineController, LineElement, PointElement,LinearScale, Title} from 'chart.js' 
 
-const Graph = ({dataState}) => {
+const Graph = ({age, totH, totF}) => {
 
     const chartRef = createRef();
 
@@ -11,7 +11,7 @@ const Graph = ({dataState}) => {
         const myChartRef = chartRef.current.getContext("2d");
         Chart.register(LineController, Tooltip, CategoryScale,BarController, LineElement,BarElement, PointElement, LinearScale, Title);
         
-        new Chart(myChartRef, {
+        const chartCOVDM = new Chart(myChartRef, {
             type: 'bar',
             data: {
                 labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -48,10 +48,11 @@ const Graph = ({dataState}) => {
                     }
                 }
                 });
+
+        return () => chartCOVDM.destroy();
     }, [])
 
     return (<div className="chart">
-        
         
         <div className="chartContainer">
             <canvas id="myChart" ref={chartRef}></canvas>
