@@ -8,12 +8,29 @@ const Info = ({dataState}) => {
     const [age, setAge] = useState([])
     const [totH, setHomme] = useState([])
     const [totF, setFemme] = useState([])
+    const [totDose, setDoseTotal] = useState([])
+    const [totDose1, setDose1] = useState([])
+    const [totDose2, setDose2] = useState([])
+    const [moderna, setModerna] = useState([])
+    const [astraZeneca, setAstraZeneca] = useState([])
+    const [pfizer, setPfizer] = useState([])
+    const [positif, setPositif] = useState([])
+    const [negatif, setNegatif] = useState([])
 
     
     useEffect(() => {
         let moyage = 0;
         let homme = 0;
         let femme = 0;
+        let dosetotal = 0;
+        let dosetot1 = 0;
+        let dosetot2 = 0;
+        let moderna = 0;
+        let astraZeneca = 0;
+        let pfizer = 0;
+        let positif = 0;
+        let negatif = 0;
+
         for(let i = 0; i<dataState.length; i++){
             for(let j = 0; j<dataState[i].data.length; j++){
                 moyage += dataState[i].data[j].age;
@@ -25,6 +42,33 @@ const Info = ({dataState}) => {
                     homme +=1
                 }
 
+                if(dataState[i].data[j].nbDoses === 1){
+                    dosetotal +=1
+                    dosetot1 +=1
+                    
+                }
+                if(dataState[i].data[j].nbDoses === 2){
+                    dosetotal +=2
+                    dosetot2 +=1
+                }
+
+                if(dataState[i].data[j].typeVaccin === "Moderna"){
+                    moderna +=1
+                }
+                if(dataState[i].data[j].typeVaccin === "AstraZeneca"){
+                    astraZeneca +=1
+                }
+                if(dataState[i].data[j].typeVaccin === "Pfizer"){
+                    pfizer +=1
+                }
+
+                if(dataState[i].data[j].positif === false){
+                    negatif +=1
+                }
+                if(dataState[i].data[j].positif === true){
+                    positif +=1
+                }
+
             }
         }
 
@@ -34,17 +78,41 @@ const Info = ({dataState}) => {
         setAge(newTotAge)
 
         //Affiche Homme / Femme
-        let newtotH = homme
-        let newtotF = femme
-        setHomme(newtotH)
-        setFemme(newtotF)
+        setHomme(homme)
+        setFemme(femme)
+
+        //Affichage Nombre Total dose
+        setDoseTotal(dosetotal)
+
+        //Affichage Nombre Total 1ère dose / 2ème dose
+        setDose1(dosetot1)
+        setDose2(dosetot2)
+        
+        //Affichage Vaccins Moderna / AstraZeneca / Pfizer
+        setModerna(moderna)
+        setAstraZeneca(astraZeneca)
+        setPfizer(pfizer)
+
+        //Affichage test Positif / Négatif
+        setPositif(positif)
+        setNegatif(negatif)
+
 
         let newData = dataState[0].data[0]
         setDate(newData)
+        if (data.positif === undefined){
+            console.log("aaa")
+        }
+        console.log("test : ", data.positif)
+
         console.log("data =", dataState)
+        let testdate = dataState[0].data[0].dateVaccination
+        let date = new Date(testdate)
+        console.log("date(timestamp) : ", dataState[0].data[0].dateVaccination)
+        console.log("date : ", date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear())
+        /* console.log("nbr =", dataState.length)
         console.log("H =", homme)
         console.log("F =", femme)
-        /* console.log("nbr =", dataState.length)
         console.log(Math.round(moyage/total));
         console.log("nbr2 =", dataState[0].data.length) */
     }, [dataState])
@@ -60,17 +128,22 @@ const Info = ({dataState}) => {
                 </div>
             </div>
            
-            <Graph dataState={dataState}/>
+            <Graph age={age} totF={totF} totH={totH} totDose={totDose} totDose1={totDose1} totDose2={totDose2} moderna={moderna} astraZeneca={astraZeneca} pfizer={pfizer} positif={positif} negatif={negatif} />
             <div className="staticInfo">
                 <div className="tiles">
-                    <p>Homme : </p>
-                    <p>{data.length !== 0 && totH}</p>
-                    <p>Femme : </p>
-                    <p>{data.length !== 0 && totF}</p>
+                    <p>Homme / Femme</p>
+                    <p>{data.length !== 0 && totH} / {data.length !== 0 && totF}</p>
+                    <p>{data.positif === undefined ? "Nbr total dose administrée / 1ère / 2ème" : ""}</p>
+                    <p>{data.positif === undefined ? totDose + " / " + totDose1 + " / " + totDose2 : ""}</p>
+
                 </div>
                 <div className="tiles">
                     <h2>Moyenne d'âge des patients</h2>
-                    <h3>{data.length !== 0 && age}</h3>
+                    <h4>{data.length !== 0 && age}</h4>
+                </div>
+                <div className="tiles">
+                    <h2> {data.positif === undefined ? "Vaccin utilisé Moderna / AstraZeneca / Pfizer" : "Test PCR Positif / Négatif"} </h2>
+                    <h4>{data.positif === undefined ? moderna + " / " + astraZeneca + " / " + pfizer : positif + " / " + negatif}</h4>
                 </div>
             </div>
                         

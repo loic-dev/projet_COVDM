@@ -2,22 +2,24 @@ import "../styles/graph.style.css"
 import {useEffect, createRef} from 'react'
 import {Chart, ChartConfiguration, Tooltip, CategoryScale, BarController, BarElement, LineController, LineElement, PointElement,LinearScale, Title} from 'chart.js' 
 
-const Graph = ({age, totH, totF}) => {
+const Graph = ({age, totH, totF, totDose, totDose1, totDose2, moderna, astraZeneca, pfizer, positif, negatif}) => {
 
     const chartRef = createRef();
+    
 
 
     useEffect(() => {
+        /* console.log("totalsdbdfbdb= ",totF, totH) */
         const myChartRef = chartRef.current.getContext("2d");
         Chart.register(LineController, Tooltip, CategoryScale,BarController, LineElement,BarElement, PointElement, LinearScale, Title);
         
         const chartCOVDM = new Chart(myChartRef, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: ['Pink', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    data: [totF, totH, 3, 5, 2, 3],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -50,7 +52,7 @@ const Graph = ({age, totH, totF}) => {
                 });
 
         return () => chartCOVDM.destroy();
-    }, [])
+    }, [totF, totH])
 
     return (<div className="chart">
         
