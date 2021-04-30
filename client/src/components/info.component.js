@@ -122,9 +122,9 @@ const Info = ({dataState}) => {
             <div className="header">
                 <h3>Graphique - France</h3>
                 <div className="choiceOption">
-                    <input type="button" value="genre"/>
-                    <input type="button" value="age"/>
-                    <input type="button" value="date"/>
+                    <input type="button" value="genre" id = "buttonGenre"/>
+                    <input type="button" value="dose" id = "buttonDose"/>
+                    <input type="button" value="date" id = "buttonDate"/>
                 </div>
             </div>
            
