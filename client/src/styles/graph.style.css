@@ -1,16 +1,9 @@
 .chart{
-    position: fixed;
-    top: 15vh;
-    left: 48vw;
-    right: 0;
-    bottom: 25vh;
-    padding: 20px;
-    color: white;
+    width: 100%;
 }
 
 
 
 .chartContainer{
     margin: 40px 50px 20px 50px;
-    height: 75%;
 }

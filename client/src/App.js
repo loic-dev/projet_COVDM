@@ -29,6 +29,7 @@ function App() {
     const [typeCenter, setTypeCenter ] =  useState(VACCINATION_CENTER)
     const [mapState, setMapState] =  useState(initMapState)
     const [dataState,setDataState ] = useState(initDataState)
+    const [dataStateInfo, setDataStateInfo]= useState(null)
     const [dataLoading, setDataLoading ] = useState(true) 
     const [mapLoading, setMapLoading ] = useState(true)
 
@@ -159,19 +160,19 @@ function App() {
         let responseData = await loadData(send)
         let data = responseData.data.res
         setDataState(data)
+        let result = [];
+        data.forEach((element) => {
+            result = result.concat(element.data)
+        })
+        setDataStateInfo(result)
         setDataLoading(false)
     }
 
 
     useEffect(async () => {
         await loadingDataMap()
-    }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
-
-
-    useEffect(async () => {
         await loadingData()
-    }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId])
-
+    }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
 
     const showRegion = (code) => {
         setMapState({...mapState,type:"region",region:code,departement:"",centerId:""})
@@ -226,7 +227,9 @@ function App() {
         }
     }
 
+   
     
+
    
     return (
         <div className="App">
@@ -238,7 +241,7 @@ function App() {
                 <div className={`info ${mapLoading === false ? "loaded" : ""}`}>
                     {mapLoading === true && <Loader/>}
                     {mapLoading === false && dataLoading === false &&
-                        <Info dataState={dataState} />
+                        <Info dataState={dataStateInfo} typeCenter={typeCenter}/>
                     }
                 </div>
             </div>

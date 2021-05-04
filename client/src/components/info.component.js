@@ -1,24 +1,169 @@
 import Graph from './graph.component'
 import {useEffect, Fragment, useState} from 'react'
 import '../styles/info.style.css'
+import { GENDER, NUMBER_VACCINE, TYPE_VACCIN } from '../constants/info.constant'
+import { VACCINATION_CENTER } from '../constants/state.constant'
 
-const Info = ({dataState}) => {
+const Info = ({dataState,typeCenter}) => {
 
-    const [data, setDate] = useState([])
-    const [age, setAge] = useState([])
-    const [totH, setHomme] = useState([])
-    const [totF, setFemme] = useState([])
-    const [totDose, setDoseTotal] = useState([])
-    const [totDose1, setDose1] = useState([])
-    const [totDose2, setDose2] = useState([])
-    const [moderna, setModerna] = useState([])
-    const [astraZeneca, setAstraZeneca] = useState([])
-    const [pfizer, setPfizer] = useState([])
-    const [positif, setPositif] = useState([])
-    const [negatif, setNegatif] = useState([])
 
-    
-    useEffect(() => {
+    let init_staticInfo = {
+        age:0,
+        totH:0,
+        totF:0,
+        totDose:0,
+        totDose1:0,
+        totDose2:0,
+        moderna:0,
+        astraZeneca:0,
+        pfizer:0,
+        positif:0,
+        negatif:0
+    }
+
+  
+
+    const [staticInfo, setStaticInfo ] = useState(init_staticInfo)
+    const [infoDataLoading, setInfoDataLoading] = useState(true)
+    const [chartDataSet, setChartDataSet] = useState(null)
+    const [chartLabels, setChartLabels] = useState(null)
+    const [chartButton, setChartButton] = useState("gender")
+
+
+
+
+
+
+    //calcul valeur du graphe
+    const chartGenderValue = async () => {
+
+        let jan = new Date(1609459200000);
+        let dateNow = Date.now()
+        let now = new Date(dateNow)
+
+
+        let labels1 = []
+        let tabMale = []
+        let tabFemale = []
+        var loop = new Date(jan);
+        while(loop <= now){          
+            var newDate = loop.setDate(loop.getDate() + 7);
+            loop = new Date(newDate);
+            labels1.push(loop)
+            var male1 = 0;
+            var female1 = 0;
+            dataState.forEach(element => {
+                let date = new Date(element.dateVaccination)
+                if(date.toDateString() === loop.toDateString()){
+                    if(element.gender === "male"){
+                        male1 +=1;
+                    } else {
+                        female1 +=1;
+                    }
+                } 
+            });
+            tabMale.push(male1)
+            tabFemale.push(female1)
+        }
+
+       /* console.log(labels1)
+        console.log(tabMale)
+        console.log(tabFemale)*/
+
+        
+        let male = {
+            label: 'homme',
+            data: tabMale,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }
+
+        let female = {
+            label: 'femme',
+            data: tabFemale,
+            fill: false,
+            borderColor: 'rgb(201, 42, 233)',
+            tension: 0.1
+        }
+
+        let dataSet = [male,female]
+        let labels = labels1
+
+        setChartDataSet(dataSet)
+        setChartLabels(labels)
+    }
+
+
+
+    const chartTypeVaccin = async () => {
+        let astraZeneca = {
+            label: 'AstraZeneca',
+            data: [0,1,3,5,10],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }
+
+        let pfizer = {
+            label: 'Pfizer',
+            data: [10,15,12,14,22],
+            fill: false,
+            borderColor: 'rgb(201, 42, 233)',
+            tension: 0.1
+        }
+
+        let moderna = {
+            label: 'Moderna',
+            data: [8,8,13,22,25],
+            fill: false,
+            borderColor: 'rgb(80, 233, 42)',
+            tension: 0.1
+        }
+
+        let dataSet = [astraZeneca,pfizer,moderna]
+        let labels = ["1 janvier","2 janvier","3 janvier", "4 janvier", "5 janvier"]
+
+        setChartDataSet(dataSet)
+        setChartLabels(labels)
+    }
+
+    const numberVaccine = async () => {
+        let number = {
+            label: 'Nombre de vacciné',
+            data: [35,52,10,35,5],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }
+        let dataSet = [number]
+        let labels = ["1 janvier","2 janvier","3 janvier", "4 janvier", "5 janvier"]
+
+        setChartDataSet(dataSet)
+        setChartLabels(labels)
+    }
+
+
+    //controller bouton graphe
+    useEffect(async () => {
+        switch (chartButton) {
+            case GENDER:
+                await chartGenderValue()
+                break;
+            case TYPE_VACCIN:
+                await chartTypeVaccin()
+                break;
+            case NUMBER_VACCINE:
+                await numberVaccine()
+                break;
+            default:
+                break;
+        }
+    }, [chartButton,dataState])
+
+
+    //controlleur donnée statique
+    useEffect(async () => {
         let moyage = 0;
         let homme = 0;
         let femme = 0;
@@ -32,122 +177,223 @@ const Info = ({dataState}) => {
         let negatif = 0;
 
         for(let i = 0; i<dataState.length; i++){
-            for(let j = 0; j<dataState[i].data.length; j++){
-                moyage += dataState[i].data[j].age;
+            moyage += dataState[i].age;
 
-                if(dataState[i].data[j].gender === "female"){
-                    femme +=1
-                }
-                if(dataState[i].data[j].gender === "male"){
-                    homme +=1
-                }
-
-                if(dataState[i].data[j].nbDoses === 1){
-                    dosetotal +=1
-                    dosetot1 +=1
-                    
-                }
-                if(dataState[i].data[j].nbDoses === 2){
-                    dosetotal +=2
-                    dosetot2 +=1
-                }
-
-                if(dataState[i].data[j].typeVaccin === "Moderna"){
-                    moderna +=1
-                }
-                if(dataState[i].data[j].typeVaccin === "AstraZeneca"){
-                    astraZeneca +=1
-                }
-                if(dataState[i].data[j].typeVaccin === "Pfizer"){
-                    pfizer +=1
-                }
-
-                if(dataState[i].data[j].positif === false){
-                    negatif +=1
-                }
-                if(dataState[i].data[j].positif === true){
-                    positif +=1
-                }
-
+            if(dataState[i].gender === "female"){
+                femme +=1
             }
+            if(dataState[i].gender === "male"){
+                homme +=1
+            }
+
+            if(dataState[i].nbDoses === 1){
+                dosetotal +=1
+                dosetot1 +=1
+                
+            }
+            if(dataState[i].nbDoses === 2){
+                dosetotal +=2
+                dosetot2 +=1
+            }
+
+            if(dataState[i].typeVaccin === "Moderna"){
+                moderna +=1
+            }
+            if(dataState[i].typeVaccin === "AstraZeneca"){
+                astraZeneca +=1
+            }
+            if(dataState[i].typeVaccin === "Pfizer"){
+                pfizer +=1
+            }
+
+            if(dataState[i].positif === false){
+                negatif +=1
+            }
+            if(dataState[i].positif === true){
+                positif +=1
+            }
+
+            
         }
 
         //Affiche + Calcul + Arrondi Âge
-        let total = dataState.length * dataState[0].data.length;
+        let total = dataState.length;
         let newTotAge = Math.round(moyage/total*10)/10
-        setAge(newTotAge)
 
-        //Affiche Homme / Femme
-        setHomme(homme)
-        setFemme(femme)
+        setStaticInfo({
+            age:newTotAge,
+            totH:homme,
+            totF:femme,
+            totDose:dosetotal,
+            totDose1:dosetot1,
+            totDose2:dosetot2,
+            moderna:moderna,
+            astraZeneca:astraZeneca,
+            pfizer:pfizer,
+            positif,
+            negatif
+        })
 
-        //Affichage Nombre Total dose
-        setDoseTotal(dosetotal)
-
-        //Affichage Nombre Total 1ère dose / 2ème dose
-        setDose1(dosetot1)
-        setDose2(dosetot2)
-        
-        //Affichage Vaccins Moderna / AstraZeneca / Pfizer
-        setModerna(moderna)
-        setAstraZeneca(astraZeneca)
-        setPfizer(pfizer)
-
-        //Affichage test Positif / Négatif
-        setPositif(positif)
-        setNegatif(negatif)
-
-
-        let newData = dataState[0].data[0]
-        setDate(newData)
-        if (data.positif === undefined){
-            console.log("aaa")
-        }
-        console.log("test : ", data.positif)
-
-        console.log("data =", dataState)
-        let testdate = dataState[0].data[0].dateVaccination
-        let date = new Date(testdate)
-        console.log("date(timestamp) : ", dataState[0].data[0].dateVaccination)
-        console.log("date : ", date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear())
-        /* console.log("nbr =", dataState.length)
-        console.log("H =", homme)
-        console.log("F =", femme)
-        console.log(Math.round(moyage/total));
-        console.log("nbr2 =", dataState[0].data.length) */
+       
     }, [dataState])
 
+
+    
+    
+    
+    useEffect(() => {
+        setInfoDataLoading(true)
+    }, [chartButton,dataState])
+
+
+    useEffect(() => {
+        setTimeout(function(){
+            setInfoDataLoading(false)
+        }, 500);
+    }, [staticInfo,chartDataSet])
+
     return (
-        <Fragment>
+        <div>
+            <div className="head">
+                <h2>Dashboard</h2>
+                <div className="swithOption">
+                    <span>Nombre de vaccination</span>
+                    <span>Répartion Homme/Femme</span>
+                    <span>Type de vaccin</span>
+                </div>
+            </div>
+            <div className="contain">
+                <div className="tiles mainGraph">
+                    <div className="headGraph">
+                        <span className="titleGraph">Graphe principal</span>
+                    </div>
+                    
+                    <div className="mainGraphContainer">
+                        {infoDataLoading === false && chartDataSet !== null &&  chartLabels !== null && <Graph chartDataSet={chartDataSet} type='line' chartLabels={chartLabels} />}
+
+                    </div>
+                </div>
+                <div className="containBottom">
+                    <div className="tiles secondGraph">
+                        <div className="headGraph">
+                            <span className="titleGraph">Graphe Secondaire</span>
+                        </div>
+                        
+                        <div className="mainGraphContainer">
+                            {infoDataLoading === true ? <p>loading</p> :
+                            <Graph chartDataSet={[{
+                                                    label: ['homme','femme'],
+                                                    data: [staticInfo.totH,staticInfo.totF],
+                                                    backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)'],
+                                                    borderColor:['rgb(75, 192, 192)','rgb(153, 102, 255)'],
+                                                    borderWidth: 1
+                                                }]} 
+                                    type='bar' 
+                                    chartLabels={["homme","femme"]} 
+                            />
+                            
+                        
+                            }
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div className="containBottomLeft">
+                        <div className="tiles square first"></div>
+                        <div className="tiles square second"></div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+        {/*<Fragment>
             <div className="header">
                 <h3>Graphique - France</h3>
                 <div className="choiceOption">
-                    <input type="button" value="genre" id = "buttonGenre"/>
-                    <input type="button" value="dose" id = "buttonDose"/>
-                    <input type="button" value="date" id = "buttonDate"/>
+                    <input type="button" className={`chartOption ${chartButton === GENDER ? "select" : ""}`} value="Genre" onClick={() => setChartButton(GENDER)}/>
+                    <input type="button" className={`chartOption ${chartButton === TYPE_VACCIN ? "select" : ""}`} value="Type de vaccin" onClick={() => setChartButton(TYPE_VACCIN)}/>
+                    <input type="button" className={`chartOption ${chartButton === NUMBER_VACCINE ? "select" : ""}`} value="Nombre de vacciné" onClick={() => setChartButton(NUMBER_VACCINE)} />
                 </div>
+            </div>
+            <div className="divChart">
+                {infoDataLoading === false && chartDataSet !== null &&  chartLabels !== null && <Graph chartDataSet={chartDataSet} type='line' chartLabels={chartLabels} />}
+
+
             </div>
            
-            <Graph age={age} totF={totF} totH={totH} totDose={totDose} totDose1={totDose1} totDose2={totDose2} moderna={moderna} astraZeneca={astraZeneca} pfizer={pfizer} positif={positif} negatif={negatif} />
+            
             <div className="staticInfo">
                 <div className="tiles">
-                    <p>Homme / Femme</p>
-                    <p>{data.length !== 0 && totH} / {data.length !== 0 && totF}</p>
-                    <p>{data.positif === undefined ? "Nbr total dose administrée / 1ère / 2ème" : ""}</p>
-                    <p>{data.positif === undefined ? totDose + " / " + totDose1 + " / " + totDose2 : ""}</p>
+                    {infoDataLoading === true ? <p>loading</p> :
+                        <Fragment>
+                            <Graph chartDataSet={[{
+                                                    label: ['homme','femme'],
+                                                    data: [staticInfo.totH,staticInfo.totF],
+                                                    backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)'],
+                                                    borderColor:['rgb(75, 192, 192)','rgb(153, 102, 255)'],
+                                                    borderWidth: 1
+                                                }]} 
+                                    type='bar' 
+                                    chartLabels={["homme","femme"]} 
+                            />
+                            {/*typeCenter === VACCINATION_CENTER &&
+                                <Fragment>
+                                    <p>Nbr total dose administrée / 1ère / 2ème"</p>
+                                    <p>{staticInfo.totDose + " / " + staticInfo.totDose1 + " / " + staticInfo.totDose2}</p>
+                                </Fragment>
+                            }
+                        </Fragment>
+                    }
+                    
+                </div>
+                <div className="tiles">
+                    {infoDataLoading === true ? <p>loading</p> :
+                        <Fragment>
+                            <h2>Moyenne d'âge des patients</h2>
+                            <h4>{staticInfo.age}</h4>
+                        </Fragment>
+                    }
+                    
+                </div>
+                {/*<div className="tiles">
+                    {typeCenter === VACCINATION_CENTER ?
+                            <Fragment>
+                               <h2>Vaccin utilisé Moderna / AstraZeneca / Pfizer</h2>
+                                <h4>{staticInfo.moderna + " / " + staticInfo.astraZeneca + " / " + staticInfo.pfizer}</h4>
+                            </Fragment>
+                            :
+                            <Fragment>
+                               <h2>Test PCR Positif / Négatif</h2>
+                                <h4>{staticInfo.positif + " / " + staticInfo.negatif}</h4>
+                            </Fragment>
 
-                </div>
-                <div className="tiles">
-                    <h2>Moyenne d'âge des patients</h2>
-                    <h4>{data.length !== 0 && age}</h4>
-                </div>
-                <div className="tiles">
-                    <h2> {data.positif === undefined ? "Vaccin utilisé Moderna / AstraZeneca / Pfizer" : "Test PCR Positif / Négatif"} </h2>
-                    <h4>{data.positif === undefined ? moderna + " / " + astraZeneca + " / " + pfizer : positif + " / " + negatif}</h4>
-                </div>
+                        }
+                    
+                    </div>}
             </div>
                         
-        </Fragment>
+            </Fragment>*/}
+        </div>
         
     )
 }
