@@ -26,16 +26,16 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
     
     const positionTooltip = (x,y) => {
         let left = x;
-        let top = y-80;
+        let top = y-100;
         let bodySelector = document.querySelector('body')
         let clientWidth = bodySelector.clientWidth
         let mapWidth = (clientWidth*48)/100
-
+    
         
-        if(left+230 >= mapWidth){
+        if(left >= mapWidth){
             left=left-100
         }
-
+    
         if(y-120 < 10){
             top = y+20
         }
@@ -147,7 +147,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
             <div class="popup">
                 <h3>${properties.nom}</h3>
                 <p>${properties.adr_num} ${properties.adr_voie} ${properties.com_cp} ${properties.com_nom}</p>
-                <p>${properties.lieu_accessibilite}<p>
+                <p>Accessibilité handicapés: ${properties.lieu_accessibilite ? properties.lieu_accessibilite : "non renseigné "}<p>
                 <h4>RDV</h4>
                 <ul>
                     <li>Lundi : ${properties.rdv_lundi}</li>
@@ -160,7 +160,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
                 </ul>
                 <p>Date d'ouverture : ${properties.date_ouverture}</p>
                 ${properties.date_fermeture && `<p>Date de Fermeture : ${properties.date_fermeture}</p>`}
-                <p>Site web : <a href="${properties.rdv_site_web}">Doctolib</a></p>
+                <p>Site web : <a target="_blank" href="${properties.rdv_site_web}">Doctolib</a></p>
                 <p>Telephone : ${properties.rdv_tel ? properties.rdv_tel : "non renseigné"}</p>
                 ${properties.rdv_tel2 && `<p>Telephone 2 : ${properties.rdv_tel2}</p>`}
             </div>
@@ -184,7 +184,7 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
                 ${!properties.horaire_prio ? "non renseigné" : 
                     `<p>${properties.horaire_prio}</p>`
                 }
-                <p>Site web : ${properties.web_rdv ? `<a href="${properties.web_rdv}">lien</a>`: "non renseigné"} </p>
+                <p>Site web : ${properties.web_rdv ? `<a target="_blank" href="${properties.web_rdv}">lien</a>`: "non renseigné"} </p>
                 <p>Telephone : ${properties.tel_rdv ? properties.tel_rdv : "non renseigné"}</p>
             </div>
         `
@@ -337,8 +337,8 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
                 
                 if(mapState.type === "center"){
                     let tu = turf(mapState.markers)
-                    tu[1] = tu[1]+0.06
-                    tu[3] = tu[3]+0.06
+                    tu[1] = tu[1]+0.15
+                    tu[3] = tu[3]+0.15
                     map.fitBounds(tu);
                      
                 } else {

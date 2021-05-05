@@ -26,7 +26,8 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
         negatif:0
     }
 
-    const TYPE_MAIN_GRAPH = [GENDER,TYPE_VACCIN,NUMBER_VACCINE]
+    const TYPE_MAIN_GRAPH_VACCIN = [GENDER,TYPE_VACCIN,NUMBER_VACCINE]
+    const TYPE_MAIN_GRAPH_DEPIS = [CAS_POSITIF]
     const TYPE_SECOND_GRAPH_VACCIN = [GENDER,TYPE_VACCIN,DOSE]
     const TYPE_SECOND_GRAPH_DEPIS = [GENDER,CAS_POSITIF]
 
@@ -51,7 +52,10 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
     const [typeGraphSecondSelect, setTypeGraphSecondSelect] = useState(0)
 
 
-
+    useEffect(() => {
+        setTypeGraphSelect(0)
+        setTypeGraphSecondSelect(0)
+    }, [typeCenter])
 
     const calculMainGraph = async (type) => {
         const jan = new Date(1609459200000);
@@ -105,7 +109,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
                     break;
             }
             dataState.forEach(data => {
-                let date = typeCenter === VACCINATION_CENTER ? new Date(data.dateVaccination) : new Date(data.dateTest)
+                let date = typeCenter === VACCINATION_CENTER ? new Date(data.dateVaccination) : new Date(data.dateDepistage)
                 if(date.toDateString() === dateLoop.toDateString()){
                     switch (type) {
                         case GENDER:
@@ -180,84 +184,87 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
     //calcul valeur du graphe
     const createDataSetToChart = async () => {
         let dataChart = null
-        console.log(typeGraphSelect)
         if(typeCenter === SCREENING_CENTER){
-            dataChart = await calculMainGraph(CAS_POSITIF)
+            dataChart = await calculMainGraph(TYPE_MAIN_GRAPH_DEPIS[0])
         } else {
-            dataChart = await calculMainGraph(TYPE_MAIN_GRAPH[typeGraphSelect])
+            dataChart = await calculMainGraph(TYPE_MAIN_GRAPH_VACCIN[typeGraphSelect])
         }
-        switch (TYPE_MAIN_GRAPH[typeGraphSelect]) {
-            case GENDER:
-                let male = {
-                    label: 'homme',
-                    data: dataChart.tabH,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }
-        
-                let female = {
-                    label: 'femme',
-                    data: dataChart.tabF,
-                    fill: false,
-                    borderColor: 'rgb(201, 42, 233)',
-                    tension: 0.1
-                }
-                setChartDataSet([male,female])
-                setNameMainGraph(MAIN_GRAPH_TITLE_GENDER)
-                break;
-            case TYPE_VACCIN:
-                let _pfiser = {
-                    label: 'Pfiser',
-                    data: dataChart.tabPfyser,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }
-        
-                let _moderna = {
-                    label: 'Moderna',
-                    data: dataChart.tabModerna,
-                    fill: false,
-                    borderColor: 'rgb(201, 42, 233)',
-                    tension: 0.1
-                }
-
-                let _astrazeneca = {
-                    label: 'Astrazeneca',
-                    data: dataChart.tabAstrazeneca,
-                    fill: false,
-                    borderColor: 'rgb(238, 161, 34)',
-                    tension: 0.1
-                }
-                setChartDataSet([_pfiser,_moderna,_astrazeneca])
-                setNameMainGraph(MAIN_GRAPH_TITLE_TYPE_VACCIN)
-                break;
-            case NUMBER_VACCINE:
-                let _numberVaccine = {
-                    label: 'Nombre de vaccination',
-                    data: dataChart.tabNumberVaccine,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }
-                setChartDataSet([_numberVaccine])
-                setNameMainGraph(MAIN_GRAPH_TITLE_NUMBER_VACCINE)
-                break;
-            case CAS_POSITIF:
-                let _casPositif = {
+        if(typeCenter == SCREENING_CENTER){
+            let _casPositif = {
                     label: 'Nombre de vaccination',
                     data: dataChart.tabCasPositif,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 }
-                setChartDataSet([_casPositif])
-                setNameMainGraph(MAIN_GRAPH_TITLE_CAS_POSITIF)
-                break;
-            default:
-                break;
+            setChartDataSet([_casPositif])
+            setNameMainGraph(MAIN_GRAPH_TITLE_CAS_POSITIF)
+               
+        } else {
+            switch (TYPE_MAIN_GRAPH_VACCIN[typeGraphSelect]) {
+                case GENDER:
+                    let male = {
+                        label: 'homme',
+                        data: dataChart.tabH,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }
+            
+                    let female = {
+                        label: 'femme',
+                        data: dataChart.tabF,
+                        fill: false,
+                        borderColor: 'rgb(201, 42, 233)',
+                        tension: 0.1
+                    }
+                    setChartDataSet([male,female])
+                    setNameMainGraph(MAIN_GRAPH_TITLE_GENDER)
+                    break;
+                case TYPE_VACCIN:
+                    let _pfiser = {
+                        label: 'Pfiser',
+                        data: dataChart.tabPfyser,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }
+            
+                    let _moderna = {
+                        label: 'Moderna',
+                        data: dataChart.tabModerna,
+                        fill: false,
+                        borderColor: 'rgb(201, 42, 233)',
+                        tension: 0.1
+                    }
+    
+                    let _astrazeneca = {
+                        label: 'Astrazeneca',
+                        data: dataChart.tabAstrazeneca,
+                        fill: false,
+                        borderColor: 'rgb(238, 161, 34)',
+                        tension: 0.1
+                    }
+                    setChartDataSet([_pfiser,_moderna,_astrazeneca])
+                    setNameMainGraph(MAIN_GRAPH_TITLE_TYPE_VACCIN)
+                    break;
+                case NUMBER_VACCINE:
+                    let _numberVaccine = {
+                        label: 'Nombre de vaccination',
+                        data: dataChart.tabNumberVaccine,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }
+                    setChartDataSet([_numberVaccine])
+                    setNameMainGraph(MAIN_GRAPH_TITLE_NUMBER_VACCINE)
+                    break;
+                
+                default:
+                    break;
+            }
         }
+        
 
 
 
@@ -354,7 +361,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
 
     useEffect(() => {
         createDataSetToSecondChart()
-    }, [typeGraphSecondSelect,staticInfo])
+    }, [typeGraphSecondSelect,staticInfo,dataState])
 
 
     //controlleur donnée statique
@@ -502,8 +509,8 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
 
              <Fragment>
 
-                    <div className={`arrow ${typeGraphSelect === 0 ? "notHover" : ""}`} onClick={() => typeGraphSelect !== 0 && changeTypeGraph("moins")}>
-                        {typeGraphSelect !== 0 && <FontAwesomeIcon className="arrowIcon" style={{marginLeft:'20px'}}  icon={faChevronLeft} />}
+                    <div className={`arrow ${typeCenter === VACCINATION_CENTER ? typeGraphSelect === 0 ? "notHover" : "" : "notHover"}`} onClick={() => typeCenter === VACCINATION_CENTER  && typeGraphSelect !== 0 && changeTypeGraph("moins")}>
+                        {typeCenter === VACCINATION_CENTER && typeGraphSelect !== 0 && <FontAwesomeIcon className="arrowIcon" style={{marginLeft:'20px'}}  icon={faChevronLeft} />}
 
                         
 
@@ -522,8 +529,8 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
 
 
                     </div>
-                    <div className={`arrow ${typeGraphSelect === TYPE_MAIN_GRAPH.length-1  ? "notHover" : ""}`} onClick={() => typeGraphSelect !== TYPE_MAIN_GRAPH.length-1  && changeTypeGraph("plus")}>
-                    {typeGraphSelect !== TYPE_MAIN_GRAPH.length-1 && <FontAwesomeIcon className="arrowIcon" style={{marginRight:'20px'}} icon={faChevronRight} />}
+                    <div className={`arrow  ${typeCenter === VACCINATION_CENTER ? typeGraphSelect === TYPE_MAIN_GRAPH_VACCIN.length-1  ? "notHover" : "" : "notHover"} `} onClick={() => typeCenter === VACCINATION_CENTER && typeGraphSelect !== TYPE_MAIN_GRAPH_VACCIN.length-1  && changeTypeGraph("plus")}>
+                    {typeCenter === VACCINATION_CENTER && typeGraphSelect !== TYPE_MAIN_GRAPH_VACCIN.length-1 && <FontAwesomeIcon className="arrowIcon" style={{marginRight:'20px'}} icon={faChevronRight} />}
 
                     </div> </Fragment> : <Loader type="second"></Loader>}
                     

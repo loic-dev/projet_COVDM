@@ -86,15 +86,15 @@
 
 .place{
     position: absolute;
-    right: 55vw;
-    top: 10px;
-    padding:10px 20px;
+    right: 54vw;
+    top: 20px;
+    padding: 10px 20px;
     z-index: 2;
     background: white;
     display: flex;
     flex-direction: row;
     border-radius: 8px;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
 }
 
 .place p{

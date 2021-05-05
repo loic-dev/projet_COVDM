@@ -47,7 +47,7 @@ const generateDataDepistage = () => {
             age:Math.floor(Math.random() * (90 - 18 + 1)) + 18,
             gender:gender,
             positif:random <= 0.2 ? true : false,
-            dateVaccination:date.getTime()
+            dateDepistage:date.getTime()
         }
         data_COVD.push(center)
     }

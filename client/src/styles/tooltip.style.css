@@ -1,7 +1,9 @@
 .tooltip{
-    position: fixed;
+    position: absolute;
+    z-index: 10;
     border-radius: 5px;
     padding: 20px;
     background-color: rgba(28,32,57,255);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
     color:white;
 }

@@ -72,9 +72,10 @@ const loadCenter = async (req,res) => {
     let _center =  await loadCenterService(typeCenter,typePlace, "center", codeRegion,codeDepartement,centerId)
     if(centerId){
         //find one center
-        let code_dep = typeCenter == "vaccinationCenter" ? _center[0].com_insee.toString().substr(0,2) : _center[0].adresse.match(/[0-9]{5,}/g)[0].substr(0,3)
+        let code_dep = typeCenter == "vaccinationCenter" ? _center[0].com_insee.toString().substr(0,2) : _center[0].adresse.match(/[0-9]{5,}/g)[0].substr(0,2)
         if(typeCenter !== "vaccinationCenter"){
-            if(parseInt(code_dep) >= 200 && parseInt(code_dep) < 202){
+            let d = _center[0].adresse.match(/[0-9]{5,}/g)[0].substr(0,3)
+            if(parseInt(d) >= 200 && parseInt(d) < 202){
                 code_dep = "2A"
             } else if(parseInt(code_dep) >= 202){
                 code_dep = "2B"
@@ -82,7 +83,7 @@ const loadCenter = async (req,res) => {
         }
         
         
-        
+        console.log(code_dep)
         let depart = departements.filter(d => d.code == code_dep)
         
         _center[0].name_dep = depart[0].name
