@@ -50,6 +50,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
     const [chartSecondaryLabels, setChartSecondaryLabels] = useState(null)
     const [typeGraphSelect, setTypeGraphSelect] = useState(0)
     const [typeGraphSecondSelect, setTypeGraphSecondSelect] = useState(0)
+    const [endAnim, setEndAnim] = useState(false)
 
 
     useEffect(() => {
@@ -479,7 +480,11 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
     }, [chartSecondaryDataSet])
 
 
-    
+    useEffect(() => {
+        setTimeout(() => {
+            setEndAnim(true)
+        }, 900);
+    }, [])
 
 
     
@@ -489,7 +494,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
 
     return (
         <div>
-            <div className="head">
+            {endAnim === true && <Fragment> <div className="head">
                 <h2>{typeCenter === VACCINATION_CENTER ? "Statistique de vaccination" : "Statistique de dépistage" }</h2>
                 <div className="switcherContainer">
                     <div className="iconSwitcher">
@@ -641,73 +646,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
 
 
 
-        {/*<Fragment>
-            <div className="header">
-                <h3>Graphique - France</h3>
-                <div className="choiceOption">
-                    <input type="button" className={`chartOption ${chartButton === GENDER ? "select" : ""}`} value="Genre" onClick={() => setChartButton(GENDER)}/>
-                    <input type="button" className={`chartOption ${chartButton === TYPE_VACCIN ? "select" : ""}`} value="Type de vaccin" onClick={() => setChartButton(TYPE_VACCIN)}/>
-                    <input type="button" className={`chartOption ${chartButton === NUMBER_VACCINE ? "select" : ""}`} value="Nombre de vacciné" onClick={() => setChartButton(NUMBER_VACCINE)} />
-                </div>
-            </div>
-            <div className="divChart">
-                {infoDataLoading === false && chartDataSet !== null &&  chartLabels !== null && <Graph chartDataSet={chartDataSet} type='line' chartLabels={chartLabels} />}
-
-
-            </div>
-           
-            
-            <div className="staticInfo">
-                <div className="tiles">
-                    {infoDataLoading === true ? <p>loading</p> :
-                        <Fragment>
-                            <Graph chartDataSet={[{
-                                                    label: ['homme','femme'],
-                                                    data: [staticInfo.totH,staticInfo.totF],
-                                                    backgroundColor: ['rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)'],
-                                                    borderColor:['rgb(75, 192, 192)','rgb(153, 102, 255)'],
-                                                    borderWidth: 1
-                                                }]} 
-                                    type='bar' 
-                                    chartLabels={["homme","femme"]} 
-                            />
-                            {/*typeCenter === VACCINATION_CENTER &&
-                                <Fragment>
-                                    <p>Nbr total dose administrée / 1ère / 2ème"</p>
-                                    <p>{staticInfo.totDose + " / " + staticInfo.totDose1 + " / " + staticInfo.totDose2}</p>
-                                </Fragment>
-                            }
-                        </Fragment>
-                    }
-                    
-                </div>
-                <div className="tiles">
-                    {infoDataLoading === true ? <p>loading</p> :
-                        <Fragment>
-                            <h2>Moyenne d'âge des patients</h2>
-                            <h4>{staticInfo.age}</h4>
-                        </Fragment>
-                    }
-                    
-                </div>
-                {/*<div className="tiles">
-                    {typeCenter === VACCINATION_CENTER ?
-                            <Fragment>
-                               <h2>Vaccin utilisé Moderna / AstraZeneca / Pfizer</h2>
-                                <h4>{staticInfo.moderna + " / " + staticInfo.astraZeneca + " / " + staticInfo.pfizer}</h4>
-                            </Fragment>
-                            :
-                            <Fragment>
-                               <h2>Test PCR Positif / Négatif</h2>
-                                <h4>{staticInfo.positif + " / " + staticInfo.negatif}</h4>
-                            </Fragment>
-
-                        }
-                    
-                    </div>}
-            </div>
-                        
-            </Fragment>*/}
+            </Fragment>}
         </div>
         
     )

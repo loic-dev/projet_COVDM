@@ -179,6 +179,7 @@ function App() {
             result = result.concat(element.data)
         })
         setDataStateInfo(result)
+
         setDataLoading(false)
     }
 
@@ -270,7 +271,7 @@ function App() {
                 </div>
                 {mapState.type !== "pays" && <BackShow/>}
                 {mapState.layers !== null && <MapBox typeCenter={typeCenter} showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
-                <div className={`info ${mapLoading === false ? "loaded" : ""}`}>
+                <div className={`info ${mapLoading === false ? "loaded" : "notLoaded"}`}>
                     {mapLoading === true && <Loader type="first"/>}
                     {mapLoading === false && dataLoading === false &&
 

@@ -34,7 +34,7 @@ input{
     left: -1vw;
     bottom: 0;
     padding: 15px 50px;
-    transition-duration: 2s;
+    transition-duration: 1.5s;
     flex-direction: column;
     display: flex;
     color: white;

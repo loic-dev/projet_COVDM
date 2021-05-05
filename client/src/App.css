@@ -115,7 +115,13 @@
 
 
 .info.loaded{
-    left: 48vw;  
+    left: 48vw;
+}
+
+.info.notLoaded{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
