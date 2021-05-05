@@ -573,15 +573,30 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
                     </div>
                     <div className="containBottomLeft">
                         <div className="tiles square first">
-                            <div className="headGraph">
-                                <span className="titleGraph">Âge moyen des patients</span>
-                            </div>
-                            <div className="donnees">
-                                <h2>{staticInfo.age}</h2>
-                            </div>
+                            {infoDataLoading === true ?
+                            
+                            <Loader type="second"></Loader>
+                            
+                            :
+                            <Fragment>
+                                <div className="headGraph">
+                                    <span className="titleGraph">Âge moyen des patients</span>
+                                </div>
+                                <div className="donnees">
+                                    <h2>{staticInfo.age}</h2>
+                                </div>
+
+                            </Fragment>}
+                           
                         </div>
                         <div className="tiles square second">
-                            {typeCenter === VACCINATION_CENTER ? 
+                            {infoDataLoading === true ?
+                            
+                            <Loader type="second"></Loader>
+                            
+                            :
+                            
+                            typeCenter === VACCINATION_CENTER ? 
                                 <div className="headGraph">
                                     <span className="titleGraph">Nombres de doses utilisées</span>
                                     <div>

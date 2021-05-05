@@ -44,6 +44,7 @@ export const loadCenterService = async (typeCenter,typePlace, typeResult, codeRe
                 }
             case "departement":
                 switch (typeCenter) {
+                    
                     case "vaccinationCenter":
                         return centers.filter(center => [codeDepartement].includes(center.com_insee.toString().substr(0,2)) == true);
                     case "screeningCenter":
@@ -68,7 +69,27 @@ export const loadCenterService = async (typeCenter,typePlace, typeResult, codeRe
 
 const loadCenter = async (req,res) => {
     const {typeCenter,typePlace,codeRegion,codeDepartement,centerId} = req.body;
-    return res.status(200).send({res:await loadCenterService(typeCenter,typePlace, "center", codeRegion,codeDepartement,centerId)})  
+    let _center =  await loadCenterService(typeCenter,typePlace, "center", codeRegion,codeDepartement,centerId)
+    if(centerId){
+        //find one center
+        let code_dep = typeCenter == "vaccinationCenter" ? _center[0].com_insee.toString().substr(0,2) : _center[0].adresse.match(/[0-9]{5,}/g)[0].substr(0,3)
+        if(typeCenter !== "vaccinationCenter"){
+            if(parseInt(code_dep) >= 200 && parseInt(code_dep) < 202){
+                code_dep = "2A"
+            } else if(parseInt(code_dep) >= 202){
+                code_dep = "2B"
+            }
+        }
+        
+        
+        
+        let depart = departements.filter(d => d.code == code_dep)
+        
+        _center[0].name_dep = depart[0].name
+        
+    }
+    
+    return res.status(200).send({res:_center})  
 }
 
 export default loadCenter;

@@ -84,6 +84,33 @@
     outline: none;
 }
 
+.place{
+    position: absolute;
+    right: 55vw;
+    top: 10px;
+    padding:10px 20px;
+    z-index: 2;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.place p{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(28,32,57,255);
+}
+
+.placeIcon{
+    color:rgba(28,32,57,255);
+    margin:auto;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
 
 
 

@@ -207,10 +207,10 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
         mouseLeaveOnLayer();
         switch (mapState.type) {
             case "pays":
-                showRegion(e.features[0].properties.code)
+                showRegion(e.features[0].properties.code,e.features[0].properties.nom)
                 break;
             case "region":
-                showDepartement(e.features[0].properties.code)
+                showDepartement(e.features[0].properties.code,e.features[0].properties.nom)
                 break;
             default:
                 break;

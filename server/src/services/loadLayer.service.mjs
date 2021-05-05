@@ -50,13 +50,46 @@ const loadRegion = async (codeRegion) => {
     }
 }
 
+const loadNameRegion = (codeRegion) => {
+    switch (codeRegion) {
+        case "76":
+            return "Occitanie";
+        case "75":
+            return "Nouvelle-Aquitaine"
+        case "93":
+            return "Provence-Alpes-Côte d'Azur";
+        case "52":
+            return "Pays de la Loire";
+        case "28":
+            return "Normandie";
+        case "11":
+            return "Île-de-France";
+        case "32":
+            return "Hauts-de-France ";
+        case "94":
+            return "Corse";
+        case "84":
+            return "Auvergne-Rhône-Alpes";
+        case "53":
+            return "Bretagne";
+        case "27":
+            return "Bourgogne-Franche-Comté";
+        case "24":
+            return "Centre-Val de Loire";
+        case "44":
+            return "Grand Est";
+        default:
+            break;
+    }
+}
+
 
 const loadDepartement = async (codeDepartement) => {
-    console.log(codeDepartement)
     let codeRegion = departements.filter(dep => dep.code.toString() === codeDepartement.toString())[0].region_code
     let region = await loadRegion(codeRegion)
     let departementIndex = region.features.findIndex(feat => feat.properties.code == codeDepartement.toString())
     region.features[departementIndex].properties.code_region = codeRegion;
+    region.features[departementIndex].properties.nom_region = loadNameRegion(codeRegion);
     let geoJSON = {
         type: 'FeatureCollection',
         features: [region.features[departementIndex]]
@@ -69,7 +102,6 @@ const loadDepartement = async (codeDepartement) => {
 
 
 const loadLayer = async (req,res) => {
-    console.log(req.body)
     const {typePlace,codeRegion,codeDepartement} = req.body;
     switch (typePlace) {
         case "pays":

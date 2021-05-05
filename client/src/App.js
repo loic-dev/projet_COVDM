@@ -9,7 +9,7 @@ import Loader from './components/loader.component';
 
 import Info from './components/info.component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faMapMarker } from '@fortawesome/free-solid-svg-icons'
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
     let initDataState = null
 
 
-
+    const [placeSelect, setPlaceSelect ] = useState("France")
     const [typeCenter, setTypeCenter ] =  useState(VACCINATION_CENTER)
     const [mapState, setMapState] =  useState(initMapState)
     const [dataState,setDataState ] = useState(initDataState)
@@ -57,6 +57,7 @@ function App() {
                         code_dep:center.com_insee.toString().substr(0,2),
                         nom:center.nom,
                         adr_num:center.adr_num,
+                        name_dep:center.name_dep,
                         adr_voie:center.adr_voie,
                         com_cp:center.com_cp,
                         com_nom:center.com_nom,
@@ -79,6 +80,7 @@ function App() {
                         coordinates: [center.long_coor1,center.lat_coor1]
                     } 
                 }
+                mapState.type === "center" && setPlaceSelect(feature.properties.com_nom)
             } else {
                 let codeDep = center.adresse.match(/[0-9]{5,}/g)[0].substr(0,2)
                 if(codeDep == "20"){
@@ -93,6 +95,7 @@ function App() {
                     type: "Feature",
                     properties: {
                         id:center._id,
+                        name_dep:center.name_dep,
                         code_dep:codeDep,
                         nom:center.rs,
                         adresse:center.adresse,
@@ -111,6 +114,8 @@ function App() {
                         coordinates: [parseFloat(center.longitude),parseFloat(center.latitude)]
                     } 
                 }
+                mapState.type === "center" && setPlaceSelect(feature.properties.adresse)
+                
             }
             markers.features.push(feature)
             
@@ -184,20 +189,24 @@ function App() {
         await loadingData()
     }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
 
-    const showRegion = (code) => {
+    const showRegion = (code,name) => {
+        setPlaceSelect(name)
         setMapState({...mapState,type:"region",region:code,departement:"",centerId:""})
     }
     
 
-    const showDepartement = async (code) => {
+    const showDepartement = async (code,name) => {
+        setPlaceSelect(name)
         setMapState({...mapState,type:"departement",region:"",departement:code,centerId:""})
     }
 
     const showPays = () => {
+        setPlaceSelect("France")
         setMapState({...mapState,type:"pays",departement:"",region:"",centerId:""})
     }
 
     const showCenter = (id) => {
+        
         setMapState({...mapState,type:"center",departement:"",region:"",centerId:id})
     }
 
@@ -211,14 +220,18 @@ function App() {
                 </div>
             case "departement":
                 if(mapState.layers.features.length > 0){
+                    console.log(mapState.layers.features[0].properties)
                     let code_region = mapState.layers.features[0].properties.code_region
-                    return <div className="retourIconContainer" onClick={() => showRegion(code_region)}> 
+                    let name_region = mapState.layers.features[0].properties.nom_region
+
+                    return <div className="retourIconContainer" onClick={() => showRegion(code_region,name_region)}> 
                         <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
                     </div>
                 }
             case "center":
                 let code_dep = mapState.markers.features[0].properties.code_dep
-                return <div className="retourIconContainer" onClick={() => showDepartement(code_dep)}>
+                console.log(mapState.markers.features[0].properties)
+                return <div className="retourIconContainer" onClick={() => showDepartement(code_dep,mapState.markers.features[0].properties.name_dep)}>
                     <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
                 </div>
             default:
@@ -251,6 +264,10 @@ function App() {
         <div className="App">
             
             <div className="map d-flex">
+                <div className="place">
+                    <FontAwesomeIcon className="placeIcon" icon={faMapMarker} />
+                    <p>{placeSelect}</p>
+                </div>
                 {mapState.type !== "pays" && <BackShow/>}
                 {mapState.layers !== null && <MapBox typeCenter={typeCenter} showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
                 <div className={`info ${mapLoading === false ? "loaded" : ""}`}>

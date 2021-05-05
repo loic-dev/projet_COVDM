@@ -79,12 +79,12 @@ input{
     background: #262b49;
     border-radius: 8px;
     box-shadow: 0 3px 0px rgba(26,30,57,255), 0 3px 0px rgba(26,30,57,255);
+    display:flex;
 }
 
 .tiles.mainGraph{
     width: 100%;
     height: 55%;
-    display:flex;
     flex-direction: row;
 }
 
@@ -95,7 +95,6 @@ input{
 .tiles.secondGraph{
     width: 65%;
     height: 100%;
-    display:flex;
     flex-direction: row;
 }
 
@@ -114,8 +113,11 @@ input{
 .tiles.square{
     width: 100%;
     height: 50%;
+    flex-direction: column;
     
 }
+
+
 
 .tiles.square.first{
     margin-bottom: 10px;
