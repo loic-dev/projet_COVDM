@@ -55,12 +55,29 @@
     border: none;
 }
 
-.map button{
+.map .retourIconContainer{
     position: fixed;
     z-index: 8;
-    background-color: red;
+    background-color: rgba(28,32,57,255);
     top: 20px;
     left: 10px;
+    width: 50px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.retourIconContainer:hover .iconRetour{
+    margin-right: 15px;
+}
+
+.iconRetour{
+    color: white;
+    font-size: 25px;
+    transition-duration: 0.3s;
 }
 
 .mapboxgl-canvas:focus{

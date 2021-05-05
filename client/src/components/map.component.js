@@ -26,14 +26,14 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
     
     const positionTooltip = (x,y) => {
         let left = x;
-        let top = y-120;
+        let top = y-80;
         let bodySelector = document.querySelector('body')
         let clientWidth = bodySelector.clientWidth
         let mapWidth = (clientWidth*48)/100
 
         
         if(left+230 >= mapWidth){
-            left=left-200
+            left=left-100
         }
 
         if(y-120 < 10){

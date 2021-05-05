@@ -2,29 +2,29 @@ import "../styles/graph.style.css"
 import {useEffect, createRef, useState} from 'react'
 import {Chart, ChartConfiguration, Tooltip, DateAdapter, CategoryScale, BarController, BarElement, LineController, LineElement, PointElement,LinearScale, Title, Legend, TimeScale, TimeSeriesScale} from 'chart.js' 
 import 'chartjs-adapter-moment';
-const Graph = ({chartDataSet, chartLabels,type}) => {
+const GraphSecond = ({chartDataSet, chartLabels,type}) => {
 
-    const chartRef = createRef();
+    const chartSecondRef = createRef();
 
-    const [chart, setChart] = useState(null)
+    const [chartSecond, setChartSecond] = useState(null)
     
 
     useEffect(() => {
-        if(chart !== null){
-            chart.data.labels = chartLabels;
-            chart.data.datasets = chartDataSet;
-            chart.update();
+        if(chartSecond !== null){
+            chartSecond.data.labels = chartLabels;
+            chartSecond.data.datasets = chartDataSet;
+            chartSecond.update();
         }
         
     }, [chartDataSet,chartLabels])
     
 
     useEffect(() => {
-        const myChartRef = chartRef.current.getContext("2d");
+        const myChartSecondRef = chartSecondRef.current.getContext("2d");
         Chart.register(LineController, Tooltip, Legend, CategoryScale,BarController, TimeSeriesScale , TimeScale, LineElement,BarElement, PointElement, LinearScale, Title);
 
-        const chartCOVDM = new Chart(myChartRef, {
-            type,
+        const graphSecond = new Chart(myChartSecondRef, {
+            type:'bar',
             data: {
                 labels: chartLabels,
                 datasets: chartDataSet
@@ -39,30 +39,21 @@ const Graph = ({chartDataSet, chartLabels,type}) => {
                 animation: {
                     duration: 0
                 },
-                scales: type === 'line' ? {
-                    x: {
-                        type: 'time',
-                        ticks: {
-                            maxTicksLimit: 10
-                        }
-                    }
-                
-                } : {}
                 
             }
         });
 
         
-        setChart(chartCOVDM)
+        setChartSecond(graphSecond)
          
-        return () => chartCOVDM.destroy();    
+        return () => graphSecond.destroy();    
 
     }, [])
 
-    return (<canvas  ref={chartRef}></canvas>)
+    return (<canvas  ref={chartSecondRef}></canvas>)
 
 
     
 }
 
-export default Graph;
+export default GraphSecond;

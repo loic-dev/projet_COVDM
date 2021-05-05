@@ -1,12 +1,7 @@
 .tooltip{
     position: fixed;
-    height: 70px;
     border-radius: 5px;
-    padding: 5px;
-    background-color: #232633;
+    padding: 20px;
+    background-color: rgba(28,32,57,255);
     color:white;
-    width: 200px;
-    height: 100px;
-    
-    
 }

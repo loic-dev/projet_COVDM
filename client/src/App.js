@@ -6,8 +6,10 @@ import { loadData, loadLayer, loadCenter } from './Utils/api.util.js'
 import MapBox from './components/map.component'
 import Loader from './components/loader.component';
 
-import Switcher from './components/switcher.component';
+
 import Info from './components/info.component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 
 function App() {
@@ -32,6 +34,12 @@ function App() {
     const [dataStateInfo, setDataStateInfo]= useState(null)
     const [dataLoading, setDataLoading ] = useState(true) 
     const [mapLoading, setMapLoading ] = useState(true)
+
+
+    const [infoDataLoading, setInfoDataLoading] = useState(true)
+
+
+    
 
 
     const createMarker = async (centers) => {
@@ -149,6 +157,7 @@ function App() {
     }
 
     const loadingData = async () => {
+        
         let send = {
             typeCenter:typeCenter,
             typePlace:mapState.type,
@@ -170,6 +179,7 @@ function App() {
 
 
     useEffect(async () => {
+        setInfoDataLoading(true)
         await loadingDataMap()
         await loadingData()
     }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
@@ -196,15 +206,21 @@ function App() {
     const BackShow = ({}) => {
         switch (mapState.type) {
             case "region":
-                return <button onClick={() => showPays()}>retour</button>
+                return <div className="retourIconContainer" onClick={() => showPays()}>
+                    <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
+                </div>
             case "departement":
                 if(mapState.layers.features.length > 0){
                     let code_region = mapState.layers.features[0].properties.code_region
-                    return <button onClick={() => showRegion(code_region)}>retour</button>
+                    return <div className="retourIconContainer" onClick={() => showRegion(code_region)}> 
+                        <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
+                    </div>
                 }
             case "center":
                 let code_dep = mapState.markers.features[0].properties.code_dep
-                return <button onClick={() => showDepartement(code_dep)}>retour</button>
+                return <div className="retourIconContainer" onClick={() => showDepartement(code_dep)}>
+                    <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
+                </div>
             default:
                 return;
         }
@@ -236,12 +252,12 @@ function App() {
             
             <div className="map d-flex">
                 {mapState.type !== "pays" && <BackShow/>}
-                {mapState.layers !== null && <Switcher typeCenter={typeCenter} switchCenter={switchCenter.bind(this)}/>}
                 {mapState.layers !== null && <MapBox typeCenter={typeCenter} showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
                 <div className={`info ${mapLoading === false ? "loaded" : ""}`}>
-                    {mapLoading === true && <Loader/>}
+                    {mapLoading === true && <Loader type="first"/>}
                     {mapLoading === false && dataLoading === false &&
-                        <Info dataState={dataStateInfo} typeCenter={typeCenter}/>
+
+                        <Info dataState={dataStateInfo} infoDataLoading={infoDataLoading} setInfoDataLoading={setInfoDataLoading.bind(this)} switchCenter={switchCenter.bind(this)} typeCenter={typeCenter}/>
                     }
                 </div>
             </div>

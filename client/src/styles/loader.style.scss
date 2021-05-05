@@ -9,6 +9,7 @@ $loader-keyframe: 1 / (length($loader-colors) * 2) * 100;
   padding: 1rem;
   max-width: 30px;
   width: 100%;
+  margin: auto;
 
   @keyframes loader-turn {
     50% { transform: rotate(180deg) }
