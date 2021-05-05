@@ -573,13 +573,29 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
                     </div>
                     <div className="containBottomLeft">
                         <div className="tiles square first">
-                            
-                        
-
+                            <div className="headGraph">
+                                <span className="titleGraph">Âge moyen des patients</span>
+                            </div>
+                            <div className="donnees">
+                                <h2>{staticInfo.age}</h2>
+                            </div>
                         </div>
                         <div className="tiles square second">
-
-
+                            {typeCenter === VACCINATION_CENTER ? 
+                                <div className="headGraph">
+                                    <span className="titleGraph">Nombres de doses utilisées</span>
+                                    <div>
+                                        <h2>{staticInfo.totDose}</h2>
+                                    </div>
+                                </div>
+                                :
+                                <div className="headGraph">
+                                    <span className="titleGraph">Taux de positivité des tests</span>
+                                    <div>
+                                        <h2>{Math.round(100*staticInfo.positif / (staticInfo.positif + staticInfo.negatif)*10)/10} %</h2>
+                                    </div>
+                                </div>
+                            }
                         </div>
 
 
