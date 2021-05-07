@@ -593,10 +593,11 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
                             <Fragment>
                                 <div className="headGraph">
                                     <span className="titleGraph">Âge moyen des patients</span>
+                                    <div>
+                                        <h2>{staticInfo.age} ans</h2>
+                                    </div>
                                 </div>
-                                <div className="donnees">
-                                    <h2>{staticInfo.age}</h2>
-                                </div>
+                                
 
                             </Fragment>}
                            
@@ -612,7 +613,7 @@ const Info = ({dataState,typeCenter, switchCenter, infoDataLoading, setInfoDataL
                                 <div className="headGraph">
                                     <span className="titleGraph">Nombres de doses utilisées</span>
                                     <div>
-                                        <h2>{staticInfo.totDose}</h2>
+                                        <h2>{staticInfo.totDose} dose{staticInfo.totDose !== 0 ? "s":""}</h2>
                                     </div>
                                 </div>
                                 :

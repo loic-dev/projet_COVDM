@@ -13,3 +13,7 @@ export const loadData = async (data) => {
 export const loadLayer = async (data) => {
     return  axios.post(`${host}/loadLayer`,data);
 }
+
+export const addRating_API = async (data) => {
+    return  axios.post(`${host}/rating`,data);
+}

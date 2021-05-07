@@ -124,6 +124,26 @@
     justify-content: center;
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(13,17,42,0.5); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #262b49; 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #262b49;
+  }
+
 
 
 

@@ -112,7 +112,7 @@ input{
 
 .tiles.square{
     width: 100%;
-    height: 50%;
+    height: 50vh;
     flex-direction: column;
     
 }
@@ -130,7 +130,7 @@ input{
 }
 
 .arrow{
-    width: 5%;
+    width: 7%;
     cursor: pointer;
     transition-duration: 0.3s;
     display: flex;
@@ -195,4 +195,5 @@ input{
 
 .headGraph{
     padding: 20px 0;
+    margin: auto;
 }

@@ -1,5 +1,7 @@
 
 import React, {useEffect, useState, useRef, Fragment} from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 import Tooltip from './tooltip.component'
 import mapboxgl from 'mapbox-gl';
 import "../styles/map.style.css"
@@ -11,7 +13,7 @@ import { VACCINATION_CENTER } from '../constants/state.constant';
 
 
 
-const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMapLoading}) => {
+const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,rating, setOpenRatingPopup, ratingData,setMapLoading}) => {
 
     const [map, setMap] = useState(null);
     const [popupRef, setPopupRef] = useState(null)
@@ -104,6 +106,8 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
         return () => mapbox.remove();
     }, []);
 
+    
+
   
 
     useEffect(() => {
@@ -128,10 +132,24 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
 
 
    
-
+    useEffect(() => {
+        if( document.getElementById("openRating")){
+            document.getElementById("openRating").addEventListener("click",showRating);
+        }
+        return () => {
+            if( document.getElementById("openRating")){
+                document.getElementById("openRating").removeEventListener("click",showRating);
+            }
+            
+        }
+    }, [showCenter])
     
 
+    function showRating() {
+        setOpenRatingPopup(true)
+    }
 
+    
 
 
 
@@ -141,10 +159,31 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
         var coordinates = e.features[0].geometry.coordinates
         var properties = e.features[0].properties
         let contain = ``
+        let r = ``
+        for (let index = 1; index < 6; index++) {
+            if(index <= properties.rating){
+                r += `<span className="stars">⭐</span>\n`
+            } else {
+                r += `<span className="stars">☆</span>\n`
+            }
+                
+
+            
+        }
+
+        
+
+
 
         if(typeCenter == VACCINATION_CENTER){
             contain = `
             <div class="popup">
+                <div class="popupHeader">
+                    <div class="rating">${r}</div>
+                    <span id="openRating">Voir les avis</span>
+                </div>
+                
+                
                 <h3>${properties.nom}</h3>
                 <p>${properties.adr_num} ${properties.adr_voie} ${properties.com_cp} ${properties.com_nom}</p>
                 <p>Accessibilité handicapés: ${properties.lieu_accessibilite ? properties.lieu_accessibilite : "non renseigné "}<p>
@@ -169,12 +208,16 @@ const MapBox = ({mapState,showRegion,showDepartement,showCenter,typeCenter,setMa
            
             contain = `
             <div class="popup">
+                <div class="popupHeader">
+                    <div class="rating">${r}</div>
+                    <span id="openRating">Voir les avis</span>
+                </div>
                 <h3>${properties.nom}</h3>
                 <p>${properties.adresse}</p>
                 <p>Public : ${properties.public}</p>
                 <p>Mode prelevement : ${properties.mod_prel} </p>
-                <p>PCR : ${properties.do_prel}</p>
-                <p>Antigéniqque : ${properties.do_antigenic}</p>
+                <p>Test PCR : ${properties.do_prel}</p>
+                <p>Test Antigénique : ${properties.do_antigenic}</p>
                 <p>RDV : ${properties.check_rdv}</p>
                 <h4>Horaire</h4>
                 ${!properties.horaire ? "non renseigné" : 

@@ -89,6 +89,8 @@ const loadCenter = async (req,res) => {
         _center[0].name_dep = depart[0].name
         
     }
+
+    console.log(_center)
     
     return res.status(200).send({res:_center})  
 }

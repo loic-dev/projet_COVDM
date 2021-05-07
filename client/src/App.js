@@ -5,7 +5,7 @@ import { SCREENING_CENTER, VACCINATION_CENTER } from './constants/state.constant
 import { loadData, loadLayer, loadCenter } from './Utils/api.util.js'
 import MapBox from './components/map.component'
 import Loader from './components/loader.component';
-
+import RatingPopup from './components/ratingPopup.component';
 
 import Info from './components/info.component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,6 +35,10 @@ function App() {
     const [dataLoading, setDataLoading ] = useState(true) 
     const [mapLoading, setMapLoading ] = useState(true)
 
+    const [ratingData,setRatingData] = useState([])
+
+    const [openRatingPopup, setOpenRatingPopup] = useState(false)
+
 
     const [infoDataLoading, setInfoDataLoading] = useState(true)
 
@@ -47,13 +51,31 @@ function App() {
             type: "FeatureCollection",
             features: []
         }
+       
+        
         centers.forEach(center => {
             let feature;
+            var globalRating = 0
+            console.log(center)
+            let centerRating = center.rating
+            if(centerRating.length != 0){
+                let ratingSum = 0;
+                for( var i = 0; i < centerRating.length; i++ ){
+                    ratingSum += parseInt(centerRating[i].score);
+                }
+
+                globalRating = Math.round(ratingSum/centerRating.length);
+                
+            }
+            
+
+        
             if(typeCenter === VACCINATION_CENTER){
                 feature = {
                     type: "Feature",
                     properties: {
                         id:center._id,
+                        rating:globalRating,
                         code_dep:center.com_insee.toString().substr(0,2),
                         nom:center.nom,
                         adr_num:center.adr_num,
@@ -97,6 +119,7 @@ function App() {
                         id:center._id,
                         name_dep:center.name_dep,
                         code_dep:codeDep,
+                        rating:globalRating,
                         nom:center.rs,
                         adresse:center.adresse,
                         do_prel:center.do_prel,
@@ -156,6 +179,7 @@ function App() {
         } else {
             let responseCenter = await loadCenter(send)
             let center = responseCenter.data.res
+            setRatingData(center[0].rating)
             markers = await createMarker(center)    
         }
         setMapState({...mapState,markers,layers})
@@ -183,11 +207,18 @@ function App() {
         setDataLoading(false)
     }
 
+    const reload = async () => {
+        await loadingDataMap()
+    }
+
 
     useEffect(async () => {
         setInfoDataLoading(true)
         await loadingDataMap()
-        await loadingData()
+        setTimeout(async () => {
+            await loadingData()
+        }, 500);
+       
     }, [typeCenter,mapState.type,mapState.region,mapState.departement,mapState.centerId]);
 
     const showRegion = (code,name) => {
@@ -221,7 +252,6 @@ function App() {
                 </div>
             case "departement":
                 if(mapState.layers.features.length > 0){
-                    console.log(mapState.layers.features[0].properties)
                     let code_region = mapState.layers.features[0].properties.code_region
                     let name_region = mapState.layers.features[0].properties.nom_region
 
@@ -231,7 +261,6 @@ function App() {
                 }
             case "center":
                 let code_dep = mapState.markers.features[0].properties.code_dep
-                console.log(mapState.markers.features[0].properties)
                 return <div className="retourIconContainer" onClick={() => showDepartement(code_dep,mapState.markers.features[0].properties.name_dep)}>
                     <FontAwesomeIcon className="iconRetour" icon={faArrowLeft} />
                 </div>
@@ -259,18 +288,18 @@ function App() {
 
    
     
-
    
     return (
         <div className="App">
-            
+            {openRatingPopup == true && <RatingPopup reload={reload.bind(this)} typeCenter={typeCenter} centerId={mapState.markers.features[0].properties.id} centerName={mapState.markers.features[0].properties.nom} rating={ratingData} setOpenRatingPopup={setOpenRatingPopup.bind(this)} />}
             <div className="map d-flex">
+
                 <div className="place">
                     <FontAwesomeIcon className="placeIcon" icon={faMapMarker} />
                     <p>{placeSelect}</p>
                 </div>
                 {mapState.type !== "pays" && <BackShow/>}
-                {mapState.layers !== null && <MapBox typeCenter={typeCenter} showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
+                {mapState.layers !== null && <MapBox typeCenter={typeCenter} openRatingPopup={openRatingPopup} setOpenRatingPopup={setOpenRatingPopup.bind(this)}  showCenter={showCenter.bind(this)} setMapLoading={setMapLoading.bind(this)} mapState={mapState} showRegion={showRegion.bind(this)} showDepartement={showDepartement.bind(this)}  />}
                 <div className={`info ${mapLoading === false ? "loaded" : "notLoaded"}`}>
                     {mapLoading === true && <Loader type="first"/>}
                     {mapLoading === false && dataLoading === false &&

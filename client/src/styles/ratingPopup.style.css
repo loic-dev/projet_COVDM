@@ -1,0 +1,441 @@
+.overlay{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    animation-name: fadeInOpacity;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.ratingPopup{
+    width: 500px;
+    height: 400px;
+    z-index: 200;
+    border-radius: 8px;
+    background: rgb(28,32,57);
+    animation-name: ajustWidthOff;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+    transform: scale(1);
+    transition-duration: 0.5s;
+    
+}
+
+.ratingPopup.start{
+    animation-name: scale;
+    transform: scale(1);
+}
+
+.ratingPopup.exit{
+    animation-name:scaleOff;
+    transform: scale(0);
+}
+
+.overlay.exit{
+    animation-name:fadeInOpacityOff;
+    background: rgba(0,0,0,0);
+}
+
+.ratingPopup.addRating{
+    width: 400px;
+    height: 300px;
+    animation-name: ajustWidth;
+}
+
+.ratingPopup.ratingSucessful{
+    width: 400px !important;
+    height: 150px !important;
+    
+}
+
+
+
+
+@keyframes ajustWidth {
+	0% {
+        width: 500px;
+        height: 400px;
+	}
+	100% {
+        width: 400px;
+        height: 300px;
+	}
+}
+
+@keyframes ajustWidthOff {
+	0% {
+        width: 400px;
+        height: 300px;
+        
+	}
+	100% {
+        width: 500px;
+        height: 400px;
+	}
+}
+
+@keyframes scale {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		background: rgba(0,0,0,0);
+	}
+	100% {
+		background: rgba(0,0,0,0.7);
+	}
+}
+
+
+@keyframes scaleOff {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0);
+	}
+}
+
+@keyframes fadeInOpacityOff {
+	0% {
+		background: rgba(0,0,0,0.7);
+	}
+	100% {
+		background: rgba(0,0,0,0);
+	}
+}
+
+.containComment{
+    overflow-y: auto;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+    top: 75px;
+    border-radius: 8px;
+    background-color: rgb(18,22,47);
+    
+}
+
+.comment{
+    background:  #262b49;
+    margin: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    box-shadow: 0 3px 0px rgba(16,20,47,255), 0 3px 0px rgba(16,20,47,255);
+}
+
+.picture{
+    width: 100px;
+}
+
+.headComment{
+    display: flex;
+    flex-direction: row;
+    width: 340px;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+}
+
+.waiting{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 80px;
+}
+
+.starsIcon{
+    color: rgb(18,22,47);
+} 
+
+.footerContain{
+    height: 75px;
+    display: flex;
+    padding: 0 30px;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.ratingContain{
+    height: 175px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 18px;
+    left: 0;
+    opacity: 1;
+    position: relative;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.ratingContain.changing{
+    animation-name: fondu;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+}
+
+.ratingContain.changingRight{
+    animation-name: fonduRight;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+}
+
+.slide{
+    
+    width: 320px;
+    height: 15px;
+
+    background:rgb(18,22,47) ;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.slide p{
+    margin: 25px auto auto auto;
+
+}
+
+
+
+.tips{
+    width: 15px;
+    height: 15px;
+    border-radius: 10px;
+    display: flex;
+    background:rgb(75, 192, 192) ;
+    position: relative;
+    cursor: pointer;
+}
+
+
+@keyframes fonduRight {
+	0% {
+		opacity: 0;
+        left: -220px;
+	}
+    50% {
+        opacity: 0;
+        left: -80px;
+    }
+	100% {
+        left: 0;
+        right: 1;
+	}
+}
+
+
+@keyframes fondu {
+	0% {
+		opacity: 0;
+        left: 220px;
+	}
+    50% {
+        opacity: 0;
+        left: 80px;
+    }
+	100% {
+        left: 0;
+        opacity: 1;
+	}
+}
+
+.commentTextArea{
+    padding: 5px;
+    background: rgb(18,22,47);
+    border: none;
+    color: white;
+    outline: none;
+    width: 300px;
+    resize: none;
+    border-radius: 5px;
+    height: 200px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.validIcon{
+    margin-top: -28px;
+}
+
+.validIconContainer{
+    display: flex;
+    flex-direction: row-reverse !important;
+    padding: 0 15px !important;
+}
+
+.headerSignOut{
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+}
+
+.headerSignOut span{
+    text-align: left;
+    margin: 0 12px;
+}
+
+.emailSignOut span{
+    text-align: left;
+
+}
+
+.inputName{
+    background: rgb(18,22,47);
+    border: none;
+    color: white;
+    outline: none; 
+    font-size: 16px;
+    font-weight: 400;
+    width: 150px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 10px;
+}
+
+.emailSignOut{
+    display: flex;
+    flex-direction: column;
+}
+
+.inputEmail{
+    background: rgb(18,22,47);
+    border: none;
+    color: white;
+    outline: none; 
+    font-size: 16px;
+    font-weight: 400;
+    width: 330px;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.headerSignOut div{
+    display: flex;
+    flex-direction: column;
+}
+
+.addStarsIcon{
+    font-size: 35px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    
+}
+
+.starsIcon.checked{
+    color: orange;
+}
+
+.ratingButton{
+    padding: 5px 10px;
+    background: rgb(75, 192, 192);
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    opacity: 0.5;
+    transition-duration: 0.3s;
+}
+
+.ratingButton.good{
+    opacity: 1;
+}
+
+.clockIcon{
+    color: rgb(75, 192, 192);
+}
+
+.ratingPopup_head{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    height: 75px;
+    
+}
+
+
+.letRating{
+    padding:10px;
+    border: 2px solid rgb(75, 192, 192)  ;
+    color:rgb(75, 192, 192) ;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.letRating:hover{
+    background: rgb(75, 192, 192)  ;
+    color:white ;
+}
+
+.nameCenter{
+    max-width: 280px;
+    color: white;
+}
+
+.c_comment{
+    padding: 0 22px 15px 22px;
+    display: flex;
+}
+
+.userIconContainer{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(18,22,47);
+    border-radius: 30px;
+    margin: 15px auto;
+}
+
+.c_comment p {
+    margin: 0;
+}
+
+.ratingHeader{
+    color: white;
+    width: 500;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    justify-content: space-between;
+}
+
+.ratingHeaderIco{
+    font-size: 20px;
+    cursor: pointer;
+}

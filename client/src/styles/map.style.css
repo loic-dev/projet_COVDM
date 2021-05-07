@@ -16,10 +16,44 @@
         
 }
 
+.popupHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.rating{
+    display: flex;
+    align-items: center;
+}
+
+#openRating{
+    padding: 5px;
+    cursor: pointer;
+    border: 2px solid orange;
+    border-radius: 5px;
+    color: orange;
+    transition-duration: 0.3s;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+#openRating:hover{
+    background: orange;
+    color: white;
+}
+
+.popupHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .mapboxgl-popup-content{
     background-color: rgba(28,32,57,255) !important;
     width: 300px !important;
     max-height: 650px  !important;
+    border-radius: 8px !important;
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip{
