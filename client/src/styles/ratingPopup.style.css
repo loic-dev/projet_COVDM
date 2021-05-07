@@ -354,6 +354,14 @@
     color: orange;
 }
 
+.aucunAvis{
+    margin: auto;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 15px;
+}
+
 .ratingButton{
     padding: 5px 10px;
     background: rgb(75, 192, 192);

@@ -299,6 +299,7 @@ const RatingPopup = ({setOpenRatingPopup, rating, reload,centerName, typeCenter,
                         <span onClick={() => setAddRating(true)} className="letRating">Laissez un avis</span>
                     </div>
                     <div className="containComment">
+                        {rating.length === 0 && <p className="aucunAvis">Aucun avis</p>}
                         {rating.map(r => {
                             return (
                             <div className="comment">
